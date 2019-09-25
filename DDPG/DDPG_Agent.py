@@ -127,4 +127,4 @@ class DDPGAgent:
 		# update net
 		utils.soft_update(self.AC_t, self.AC, self.tau)
 
-		return actor_loss.cpu(), critic_loss.cpu()
+		return actor_loss.detach().cpu().numpy(), critic_loss.detach().cpu().numpy()
