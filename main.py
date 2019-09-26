@@ -24,7 +24,7 @@ if __name__ == '__main__':
 	parser.add_argument('--tau', type=float, default=0.01)
 	parser.add_argument('--critic_lr', type=float, default=1e-3)
 	parser.add_argument('--actor_lr', type=float, default=1e-3)
-	parser.add_argument('--initial_e', type=float, defauclt=0.5)
+	parser.add_argument('--initial_e', type=float, default=0.5)
 	parser.add_argument('--end_e', type=float, default=0.01)
 	parser.add_argument('--e_decay', type=int, default=10000)
 	parser.add_argument('--render', type=bool, default=True)
