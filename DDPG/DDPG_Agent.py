@@ -82,7 +82,7 @@ class DDPGAgent:
 		self.steps += 1
 
 		if self.e > self.end_e and self.steps > self.start_training:
-			self.e -= (self.initial_e - self.end_e) * self.args.e_decay
+			self.e -= (self.initial_e - self.end_e) / self.args.e_decay
 
 		state = Variable(torch.tensor(state)).cuda()
 		action = self.actor(state).detach().cpu().numpy()
