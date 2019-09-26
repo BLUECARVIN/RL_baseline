@@ -8,13 +8,14 @@ from torch.nn import functional as F
 from torch.autograd import Variable
 from torch import optim
 
+import utils
 from utils import memory
 from utils import noise
 from utils.update import soft_update, hard_update
 
 import gym
 import numpy as np
-import DDPG_Model
+from DDPG import DDPG_Model
 
 
 class DDPGAgent:
@@ -81,7 +82,7 @@ class DDPGAgent:
 		self.steps += 1
 
 		if self.e > self.end_e and self.steps > self.start_training:
-			self.e -= (self.initial_e - self.end_e) / 20000
+			self.e -= (self.initial_e - self.end_e) * self.args.e_decay
 
 		state = Variable(torch.tensor(state)).cuda()
 		action = self.actor(state).detach().cpu().numpy()
@@ -103,15 +104,15 @@ class DDPGAgent:
 		done = Variable(torch.tensor(done)).cuda()
 
 		# optimize critic 
-		a2 = self.action_t(s2).detach()
+		a2 = self.actor_t(s2).detach()
 		r_predict = torch.squeeze(self.critic_t(s2, a2).detach())
-		r_predict = self.gamma * (torch.ones(batch_size) - done) * r_predict
+		r_predict = self.gamma * (torch.ones(self.batch_size).cuda() - done) * r_predict
 
 		y_j = r1 + r_predict
 		r_ = torch.squeeze(self.critic(s1, a1))
 
 		self.critic_optimizer.zero_grad()
-		critic_loss = self.loss_f(y_j, r)
+		critic_loss = self.loss_f(y_j, r_)
 		critic_loss.backward()
 		self.critic_optimizer.step()
 
@@ -125,6 +126,6 @@ class DDPGAgent:
 		self.actor_optimizer.step()
 
 		# update net
-		utils.soft_update(self.AC_t, self.AC, self.tau)
+		soft_update(self.AC_t, self.AC, self.tau)
 
 		return actor_loss.detach().cpu().numpy(), critic_loss.detach().cpu().numpy()

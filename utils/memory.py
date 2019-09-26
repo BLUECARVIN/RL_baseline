@@ -26,7 +26,8 @@ class SimpleMemoryBuffer: # for continous env memory, a simple random buffer
 		return self.len
 
 	def add(self, s, a, r, s1, done):
-		if_done = [1. if done[i] else 0. for i in range(len(done))]
+		# if_done = [1. if done[i] else 0. for i in range(len(done))]
+		if_done = 1 if done else 0
 		transition = (s, a, r, s1, if_done)
 		self.len += 1
 		if self.len > self.maxSize:

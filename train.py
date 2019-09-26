@@ -25,7 +25,10 @@ def train(env, args):
 			critic_loss = 0
 			state = np.float32(observation)
 
-			action = agent.get_exploration_action(state)
+			if steps_done < args.start_training:
+				action = env.action_space.sample()
+			else:
+				action = agent.get_exploration_action(state)
 
 			new_observation, reward, done, _ = env.step(action)
 
@@ -43,13 +46,13 @@ def train(env, args):
 			if steps_done > args.start_training:
 				actor_loss, critic_loss = agent.optimize()
 
-			epoch_actor_loss.append(action_loss)
-			epoch_critic_loss.append(critic_loss)
+				epoch_actor_loss.append(actor_loss)
+				epoch_critic_loss.append(critic_loss)
 
 			if done:
 				break
-		print("Total_reward:{}, Mean actor loss:{}, Mean critic loss:{}, total step:{}".format(
-			total_reward, np.mean(epoch_actor_loss), np.mean(epoch_critic_loss), steps_done))
+		print("Total_reward:{}, Mean actor loss:{}, Mean critic loss:{}, total step:{}， epoch:{}".format(
+			total_reward, np.mean(epoch_actor_loss), np.mean(epoch_critic_loss), steps_done, epoch))
 
 		if (epoch + 1) % 10 == 0:
 			agent.save_models('DDPG')
