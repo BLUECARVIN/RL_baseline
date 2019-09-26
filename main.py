@@ -1,5 +1,6 @@
 import os
 import train
+import test
 import gym
 
 
@@ -7,7 +8,8 @@ def main(args):
 	env = gym.make(args.env)
 	if args.train:
 		train.train(env, args)
-
+	else:
+		test.test(env, args)
 
 if __name__ == '__main__':
 	import argparse
