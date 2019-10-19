@@ -6,7 +6,7 @@ import torch
 
 def train(env, args):
 	if args.memory == 'simple':
-		ram = SimpleMemoryBuffer(args.memory_max_size)
+		ram = SimpleMemoryBuffer(args.memory_max_size, args)
 
 	if args.agent == 'DDPG':
 		from DDPG import DDPG_Agent
@@ -20,7 +20,7 @@ def train(env, args):
 		epoch_actor_loss = []
 		epoch_critic_loss = []
 
-		for r in range(10000):
+		for r in range(1000):
 			actor_loss = 0
 			critic_loss = 0
 			state = np.float32(observation)

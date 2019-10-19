@@ -89,7 +89,8 @@ class DDPGAgent:
 		action = np.squeeze(action)
 
 		# add random noise
-		noise = self.noise.sample()
+		# noise = self.noise.sample()
+		noise = np.random.randn(self.act_dim)
 		action_noise = (1 - self.e) * action + self.e * noise
 		action_noise = np.clip(action_noise, self.action_low, self.action_high)
 		return action_noise

@@ -6,8 +6,9 @@ import torch
 def test(env, args):
 	if args.agent == 'DDPG':
 		from DDPG import DDPG_Agent
-		agent = DDPG_Agent.DDPG_Agent(env.observation_space,
+		agent = DDPG_Agent.DDPGAgent(env.observation_space,
 			env.action_space, None, args)
+		agent.load_state_dict(torch.load(args.save_path+"/params/"+args.agent+'.pt'))
 
 	steps_done = 0
 

@@ -4,15 +4,19 @@ import numpy as np
 
 
 class SimpleMemoryBuffer: # for continous env memory, a simple random buffer
-	def __init__(self, size):
+	def __init__(self, size, args):
 		self.buffer = deque(maxlen=size)
 		self.maxSize = size
 		self.len = 0
+		self.args = args
 
 	def sample(self, count):
 		batch = []
 		count = min(count, self.len)
-		batch = random.sample(self.buffer, count)
+		if self.args.memory_sample == 'FIFO':
+			batch = [self.buffer[i] for i in range(count)]
+		elif self.args.memory_sample == 'random':
+			batch = random.sample(self.buffer, count)
 
 		s_arr = np.float32([arr[0] for arr in batch])	# state
 		a_arr = np.float32([arr[1] for arr in batch])	# action

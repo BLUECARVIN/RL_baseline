@@ -32,5 +32,6 @@ if __name__ == '__main__':
 	parser.add_argument('--render', type=bool, default=True)
 	parser.add_argument('--max_epoch', type=int, default=10000)
 	parser.add_argument('--save_path', type=str, default='./result')
+	parser.add_argument('--memory_sample', type=str, default='FIFO')
 	args = parser.parse_args()
 	main(args)
